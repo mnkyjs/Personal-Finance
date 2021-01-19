@@ -1,0 +1,42 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Personal.Finance.WebApi.AspNetCore.Swagger
+{
+    public class SecurityRequirementsOperationFilter : IOperationFilter
+    {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            // Policy names map to scopes
+            var requiredScopes = context.MethodInfo
+                .GetCustomAttributes(inherit: true)
+                .OfType<AuthorizeAttribute>()
+                .Select(attr => attr.Policy)
+                .Distinct(System.StringComparer.Ordinal);
+
+            if (requiredScopes.Any())
+            {
+                operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+                operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+
+                var oAuthScheme = new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
+                };
+
+                operation.Security = new List<OpenApiSecurityRequirement>
+                {
+                    new OpenApiSecurityRequirement
+                    {
+                        [oAuthScheme] = requiredScopes.ToList(),
+                    },
+                };
+            }
+        }
+    }
+}

@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Serilog;
+using NLog;
+using NLog.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Personal.Finance.WebApi
 {
@@ -14,40 +10,36 @@ namespace Personal.Finance.WebApi
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
-                .CreateLogger();
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
             try
             {
-                Log.Information("Application Starting Up");
+                logger.Info("Application is starting up.");
                 CreateHostBuilder(args).Build().Run();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.Fatal(e, "The application failed to start correctly.");
+                logger.Error(ex, "Application stopped due to unhandled exception.");
+                throw;
             }
             finally
             {
-                Log.CloseAndFlush();
+                LogManager.Shutdown();
             }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureLogging((hostingContext, logging) =>
+                    {
+                        logging.AddNLog(hostingContext.Configuration.GetSection("Logging"));
+                    });
                     webBuilder.UseUrls("http://0.0.0.0:6025");
                 });
-            // .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
-            //     .ReadFrom.Configuration(hostingContext.Configuration));
         }
     }
 }

@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Personal.Finance.WebApi.Controllers
 {
+    [AllowAnonymous]
     public class FallbackController : Controller
     {
         // GET
         public IActionResult Index()
         {
-            return PhysicalFile(Path.Combine(Path.Combine(Directory.GetCurrentDirectory()), "Client/Angular", "index.html"),
+            return PhysicalFile(Path.Combine(Path.Combine(Directory.GetCurrentDirectory()), "wwwroot", "index.html"),
                 "text/HTML");
         }
     }

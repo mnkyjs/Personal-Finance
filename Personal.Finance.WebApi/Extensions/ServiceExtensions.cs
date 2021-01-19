@@ -14,20 +14,7 @@ namespace Personal.Finance.WebApi.Extensions
 
         public static void ConfigureCors(this IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
-            });
-        }
-
-        public static void ConfigureIISIntegration(this IServiceCollection services)
-        {
-            services.Configure<IISOptions>(options =>
-            {
-            });
+            services.AddCors();
         }
 
         public static void AddPolicies(this IServiceCollection services)
@@ -35,6 +22,7 @@ namespace Personal.Finance.WebApi.Extensions
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Root", policy => policy.RequireRole("Administrator"));
+                options.AddPolicy("Authorize", policy => policy.RequireRole("Administrator", "User"));
             });
         }
     }

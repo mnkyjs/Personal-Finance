@@ -100,7 +100,7 @@ namespace Personal.Finance.Database.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Personal.Finance.Domain.Entities.Categorie", b =>
+            modelBuilder.Entity("Personal.Finance.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace Personal.Finance.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategorieId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Date")
@@ -178,7 +178,7 @@ namespace Personal.Finance.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategorieId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -333,7 +333,7 @@ namespace Personal.Finance.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Personal.Finance.Domain.Entities.Categorie", b =>
+            modelBuilder.Entity("Personal.Finance.Domain.Entities.Category", b =>
                 {
                     b.HasOne("Personal.Finance.Domain.Entities.User", "User")
                         .WithMany()
@@ -344,9 +344,9 @@ namespace Personal.Finance.Database.Migrations
 
             modelBuilder.Entity("Personal.Finance.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Personal.Finance.Domain.Entities.Categorie", "Categorie")
+                    b.HasOne("Personal.Finance.Domain.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategorieId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -7,7 +7,7 @@ namespace Personal.Finance.Application.Interface
     public interface IUnitOfWork : IDisposable
     {
         IRepositoryBase<Transaction> Transactions { get; }
-        IRepositoryBase<Categorie> Categories { get; }
+        IRepositoryBase<Category> Categories { get; }
         IRepositoryBase<UserBalance> UserBalances { get; }
         Task<bool> CompleteAsync();
     }

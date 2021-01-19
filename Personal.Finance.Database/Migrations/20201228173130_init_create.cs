@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Personal.Finance.Database.Migrations
 {
-    public partial class initDB : Migration
+    public partial class init_create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -209,15 +209,15 @@ namespace Personal.Finance.Database.Migrations
                     Value = table.Column<double>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    CategorieId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false),
                     TransactionType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Categories_CategorieId",
-                        column: x => x.CategorieId,
+                        name: "FK_Transactions_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -272,9 +272,9 @@ namespace Personal.Finance.Database.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_CategorieId",
+                name: "IX_Transactions_CategoryId",
                 table: "Transactions",
-                column: "CategorieId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserId",

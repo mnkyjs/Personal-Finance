@@ -13,7 +13,7 @@ namespace Personal.Finance.Application.Tools
         private readonly DataContext _context;
         private readonly ILogger<UnitOfWork> _logger;
 
-        private RepositoryBase<Categorie> _categorie;
+        private RepositoryBase<Category> _categorie;
         private RepositoryBase<Transaction> _transactions;
         private RepositoryBase<UserBalance> _userBalance;
 
@@ -23,8 +23,8 @@ namespace Personal.Finance.Application.Tools
             _logger = logger;
         }
 
-        public IRepositoryBase<Categorie> Categories =>
-                    _categorie ??= new RepositoryBase<Categorie>(_context);
+        public IRepositoryBase<Category> Categories =>
+                    _categorie ??= new RepositoryBase<Category>(_context);
 
         public IRepositoryBase<Transaction> Transactions =>
                             _transactions ??= new RepositoryBase<Transaction>(_context);

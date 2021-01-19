@@ -12,7 +12,7 @@ namespace Personal.Finance.Database
         {
         }
 
-        public virtual DbSet<Categorie> Categories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<UserBalance> UserBalances { get; set; }
 

@@ -12,9 +12,9 @@ namespace Personal.Finance.Domain.Entities
         public double Value { get; set; }
         public DateTime Date { get; set; }
         public int UserId { get; set; }
-        public int CategorieId { get; set; }
+        public int CategoryId { get; set; }
         public TransactionTypeEnum TransactionType { get; set; }
         public virtual User User { get; set; }
-        public virtual Categorie Categorie { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

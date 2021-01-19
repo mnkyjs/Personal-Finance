@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Personal.Finance.Application.Interface;
 using Personal.Finance.Database;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Personal.Finance.Application.Repository
 {
@@ -15,14 +18,6 @@ namespace Personal.Finance.Application.Repository
         {
             DatabaseContext = repositoryContext;
         }
-        public IQueryable<T> FindAll()
-        {
-            return DatabaseContext.Set<T>().AsNoTracking();
-        }
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
-        {
-            return DatabaseContext.Set<T>().Where(expression).AsNoTracking();
-        }
         public void Create(T entity)
         {
             DatabaseContext.Set<T>().Add(entity);
@@ -31,9 +26,35 @@ namespace Personal.Finance.Application.Repository
         {
             DatabaseContext.Set<T>().Update(entity);
         }
-        public void Delete(T entity)
+        public async Task Delete(int id)
         {
-            DatabaseContext.Set<T>().Remove(entity);
+            DatabaseContext.Set<T>().Remove(await DatabaseContext.Set<T>().FindAsync(id).ConfigureAwait(false));
+        }
+
+        public async Task<IEnumerable<T>> FindListConditionAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            IQueryable<T> query = DatabaseContext.Set<T>().AsNoTracking();
+
+            if (filter != null) query = query.Where(filter);
+
+            if (include != null) query = include(query);
+
+            if (orderBy != null)
+                return await orderBy(query).ToListAsync().ConfigureAwait(false);
+            return await query.ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task<T> FindByConditionSingleAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            IQueryable<T> query = DatabaseContext.Set<T>().AsNoTracking();
+
+            if (filter != null) query = query.Where(filter);
+
+            if (include != null) query = include(query);
+
+            if (orderBy != null)
+                return await orderBy(query).FirstOrDefaultAsync().ConfigureAwait(false);
+            return await query.FirstOrDefaultAsync().ConfigureAwait(false);
         }
     }
 }

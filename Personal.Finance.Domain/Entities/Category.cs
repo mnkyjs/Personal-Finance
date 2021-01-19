@@ -2,7 +2,7 @@
 
 namespace Personal.Finance.Domain.Entities
 {
-    public class Categorie
+    public class Category
     {
         public int Id { get; set; }
 
