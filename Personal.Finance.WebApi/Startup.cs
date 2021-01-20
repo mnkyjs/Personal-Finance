@@ -145,8 +145,7 @@ namespace Personal.Finance.WebApi
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey =
                         new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(
-                                "\"~)veC+V2mS]i~\\]^/)UU$s\"r_Y@*v0L@fI\"WbRMvHy?7PWX{EaZv/VG{:7Ch.5%u\"")),
+                            Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
